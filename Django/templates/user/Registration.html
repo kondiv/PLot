@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="bd-reg">
+    <div class="container" {% if role == 'owner' %}style="width: 60%{% endif %}">
+    <div class="logo">
+        <img src="{% static 'Photo/BigLogo.png' %}" alt="Plot Logo">
+        <div class="but-log">
+            <a href="?role=driver" class="btn {% if role == 'driver' %}btn-secondary{% else %}btn-primary{% endif %}">Водитель</a>
+            <a href="?role=owner" class="btn {% if role == 'owner' %}btn-secondary{% else %}btn-primary{% endif %}">Владелец</a>
+        </div>
+    </div>
+
+        <h2>Регистрация</h2>
+
+        {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            <strong>Пожалуйста, исправьте ошибки в форме!</strong>
+        </div>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" class="{% if role == 'owner' %}form-reg-owner{% endif %}" >
+            {% csrf_token %}
+        <div style="display: flex;{% if role == 'owner' %}flex-direction: row{% else %} flex-direction: column{% endif %}">
+            <div style="display: flex;flex-direction: column;{% if role == 'owner' %}width: 45%;margin: 30px{% endif %}">
+            {% if role == 'owner' %}
+            <h3>Данные пользователя:</h3>
+            {% endif %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">ФИО</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                <div class="error-text">{{ form.username.errors|striptags }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Эл.адрес</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                <div class="error-text">{{ form.email.errors|striptags }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.phone_number.id_for_label }}">Телефон</label>
+                {{ form.phone_number }}
+                {% if form.phone_number.errors %}
+                <div class="error-text">{{ form.phone_number.errors|striptags }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Пароль</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                <div class="error-text">{{ form.password.errors|striptags }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password_confirm.id_for_label }}">Подтвердите пароль</label>
+                {{ form.password_confirm }}
+                {% if form.password_confirm.errors %}
+                <div class="error-text">{{ form.password_confirm.errors|striptags }}</div>
+                {% endif %}
+            </div>
+        </div>
+        {% if role == 'owner' %}
+
+        <div style="display: flex;flex-direction: column;width: 50%;justify-content: center;margin-bottom: 15px">
+
+            <h3>Данные парковки:</h3>
+        <div class="add_parking_form" style="gap: 10px">
+            <div>
+                <label for="address">Адрес:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+            <div>
+                <label for="floors">Кол-во этажей:</label>
+                <input type="number" id="y-value" name="numbers_of_floors" class="editable-div" placeholder="1 ... 10" min="1" max="10" step="1" required>
+            </div>
+            <div>
+                <label for="price">Цена парковочного места за час:</label>
+                <input type="number" id="price" name="price" max="10000" required>
+            </div>
+
+    <div id="metro_stations_wrapper">
+
+        <div id="metro_stations_container" class="scroll-container">
+            <div class="metro_color_select single-station-form">
+                <label>Станция метро:</label>
+                <div class="station-label">
+                    <div>
+                        <input type="text" class="metro_search" placeholder="Введите название станции" autocomplete="off">
+                        <div class="autocomplete-results"></div>
+                    </div>
+                    <div class="color-circle"></div>
+                </div>
+                <input type="hidden" class="selected_station" name="metro_station[]">
+                <input type="hidden" class="selected_color" name="metro_color[]">
+            </div>
+        </div>
+
+    <div style="display: flex;flex-direction: row;justify-content: space-between">
+    <button id="scroll_left_btn" class="scroll-btn" style="display: none;" type="button">◀</button>
+    <button id="scroll_right_btn" class="scroll-btn" style="display: none;" type="button">▶</button>
+    </div>
+
+    </div>
+            <div>
+                <p>Добавить еще одну станцию</p>
+                <button type="button" id="add_station_btn" class="btn-add-station" style="height: auto">+</button>
+            </div>
+            <div>
+                <label for="files">Загрузить документы:</label>
+                <input type="file" id="uploaded_file" name="uploaded_file" multiple>
+            </div>
+            </div>
+            </div>
+        </div>
+
+        {% endif %}
+
+        <div>
+        <button type="submit" class="btn" style="width: 50%">{% if role == 'owner' %}Зарегистрироваться и добавить парковку{% else %}Зарегистрироваться{% endif %}</button>
+        </div>
+        </form>
+        <hr>
+        <a href="{% url 'users:login' %}" class="register-link">Вход</a>
+    </div>
+</div>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const phoneInput = document.getElementById("phone_number");
+    console.log(phoneInput)
+
+    phoneInput.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, "");
+        if (value.length > 0) value = "+" + value;
+        if (value.length > 2) value = value.slice(0, 2) + " (" + value.slice(2);
+        if (value.length > 7) value = value.slice(0, 7) + ") " + value.slice(7);
+        if (value.length > 13) value = value.slice(0, 12) + "-" + value.slice(12, 17);
+
+        e.target.value = value.slice(0, 17);
+    });
+    });
+
+
+    function initAutocomplete(container) {
+        const metroSearchInput = container.querySelector(".metro_search");
+        const metroResults = container.querySelector(".autocomplete-results");
+        const selectedStation = container.querySelector(".selected_station");
+        const selectedColor = container.querySelector(".selected_color");
+        const colorDisplay = container.querySelector(".color-circle");
+
+        metroSearchInput.addEventListener("input", async function () {
+            const query = this.value;
+
+            if (query.length < 2) {
+                metroResults.innerHTML = "";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/metro_search/?query=${query}`);
+                const data = await response.json();
+
+                metroResults.innerHTML = "";
+                data.results.forEach(item => {
+                    const div = document.createElement("div");
+                    div.textContent = item.station_name;
+                    div.dataset.stationId = item.station_id;
+                    div.dataset.color = item.color;
+
+                    const colorCircle = document.createElement("span");
+                    colorCircle.className = "color-circle";
+                    colorCircle.style.backgroundColor = item.color;
+
+                    div.appendChild(colorCircle);
+                    metroResults.appendChild(div);
+
+                    div.addEventListener("click", function () {
+                        metroSearchInput.value = item.station_name;
+                        selectedStation.value = item.station_id;
+                        selectedColor.value = item.color;
+
+                        colorDisplay.style.backgroundColor = item.color;
+
+                        metroResults.innerHTML = "";
+                    });
+                });
+            } catch (error) {
+                console.error("Ошибка получения данных:", error);
+            }
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!metroResults.contains(event.target) && event.target !== metroSearchInput) {
+                metroResults.innerHTML = "";
+            }
+        });
+        }
+
+        initAutocomplete(document.querySelector(".single-station-form"));
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const addStationBtn = document.getElementById("add_station_btn");
+        const metroContainer = document.getElementById("metro_stations_container");
+        let stationCount = 1;
+
+        addStationBtn.addEventListener("click", function () {
+            if (stationCount >= 5) return;
+
+            const newForm = document.createElement("div");
+            newForm.classList.add("metro_color_select", "single-station-form");
+            newForm.innerHTML = `
+            <label>Станция метро:</label>
+            <div class="station-label">
+                <div>
+                    <input type="text" class="metro_search" placeholder="Введите название станции" autocomplete="off">
+                    <div class="autocomplete-results"></div>
+                </div>
+                <div class="color-circle"></div>
+            </div>
+            <input type="hidden" class="selected_station" name="metro_station[]">
+            <input type="hidden" class="selected_color" name="metro_color[]">
+        `;
+            metroContainer.appendChild(newForm);
+            stationCount++;
+
+            metroContainer.scrollLeft = metroContainer.scrollWidth;
+
+            if (stationCount === 5) {
+                addStationBtn.disabled = true;
+            }
+
+            initAutocomplete(newForm);
+        });
+    });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const metroContainer = document.getElementById("metro_stations_container");
+    const scrollLeftBtn = document.getElementById("scroll_left_btn");
+    const scrollRightBtn = document.getElementById("scroll_right_btn");
+
+    const updateScrollButtons = () => {
+        const scrollLeft = metroContainer.scrollLeft;
+        const maxScrollLeft = metroContainer.scrollWidth - metroContainer.clientWidth;
+
+        scrollLeftBtn.style.display = scrollLeft > 0 ? "block" : "none";
+        scrollRightBtn.style.display = scrollLeft < maxScrollLeft ? "block" : "none";
+    };
+
+    const calculateScrollAmount = () => {
+        const visibleWidth = metroContainer.clientWidth;
+        const firstChild = metroContainer.querySelector(".single-station-form");
+        return firstChild ? firstChild.offsetWidth + 10 : visibleWidth;
+    };
+
+    scrollLeftBtn.addEventListener("click", () => {
+        const scrollAmount = calculateScrollAmount();
+        metroContainer.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    });
+
+    scrollRightBtn.addEventListener("click", () => {
+        const scrollAmount = calculateScrollAmount();
+        metroContainer.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    });
+
+    metroContainer.addEventListener("scroll", updateScrollButtons);
+
+    updateScrollButtons();
+});
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <main class="custom-main">
+        <div class="left-half"></div>
+        <div class="right-half">
+            <div class="triangle-content">
+                <h1 class="custom-header">
+                    <span class="first-part">Выберите лучшее <span class="highlight">место</span> </span>
+                    <span class="highlight">на паркинге</span>
+                </h1>
+                <a {% if user.is_authenticated %} href="{% url 'parking:all-parking-map' %}" {% else %} href="{% url 'users:login' %}" {% endif %} class="gradient-button">
+                    <li class="nav-item-main">
+                        Выбрать место
+                    </li>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div class="about-content">
+        <div class="about-uptitle">
+            <span>
+                О СЕРВИСЕ
+            </span>
+        </div>
+        <div class="about-title">
+            Сервис ParkingLot помогает Вам найти место на паркинге и забронировать его
+        </div>
+        <div class="about-info">
+            Наш сервис регулярно пополняет свою базу парковок, чтобы Вы могли найти место на парковке рядом с Вашим местом работы или рядом с домом
+        </div>
+        <div class="card-container">
+            <div class="card">
+                <img src="{% static 'icons/time_8esbp9yzzbk2.svg' %}" alt="Циферблат 24 часа" class="card-image">
+                <h2 class="card-title">Доступ 24/7</h2>
+                <p class="card-description">Наш сервис работает 24 часа в сутки и 7 дней в неделю</p>
+            </div>
+            <div class="card">
+                <img src="{% static 'icons/location_wtkm883c89jg.svg' %}" alt="Метка на карте" class="card-image">
+                <h2 class="card-title">Паркинги на карте</h2>
+                <p class="card-description">Все паркинги, зарегистрированные в нашем сервисе, отображаются на карте</p>
+            </div>
+        </div>
+    </div>
+    <div class="team">
+    <div class="team-info">
+        <h2>Наша команда</h2>
+        <p>В нашу команду входят самые высококвалифицированные IT-специалисты</p>
+    </div>
+    <div class="team-card-container">
+        <div class="team-card">
+            <img src="{% static 'Photo/Саша.jpg' %}" alt="Работник 1" class="team-card-image">
+            <h3 class="worker-name">Александр Пивоваров</h3>
+            <p class="worker-position">Фронтенд-разработчик</p>
+            <hr class="divider">
+            <p class="worker-strengths">Сильные стороны: креативность, аналитическое мышление</p>
+        </div>
+        <div class="team-card">
+            <img src="{% static 'Photo/Миша.jpg' %}" alt="Работник 2" class="team-card-image">
+            <h3 class="worker-name">Михаил Шиндяпкин</h3>
+            <p class="worker-position">Фронтенд-разработчик</p>
+            <hr class="divider">
+            <p class="worker-strengths">Сильные стороны: внимание к деталям, творчество</p>
+        </div>
+        <div class="team-card">
+            <img src="{% static 'Photo/Илья_С.jpg' %}" alt="Работник 3" class="team-card-image">
+            <h3 class="worker-name">Илья Стасенко</h3>
+            <p class="worker-position">Бэкенд-разработчик</p>
+            <hr class="divider">
+            <p class="worker-strengths">Сильные стороны: организованность, лидерские качества</p>
+        </div>
+        <div class="team-card">
+            <img src="{% static 'Photo/egor.jpg' %}" alt="Работник 4" class="team-card-image">
+            <h3 class="worker-name">Егор Сморгачев</h3>
+            <p class="worker-position">Бизнес-аналитик</p>
+            <hr class="divider">
+            <p class="worker-strengths">Сильные стороны: внимательность, критическое мышление</p>
+        </div>
+        <div class="team-card">
+            <img src="{% static 'Photo/Илья_К.jpg' %}" alt="Работник 5" class="team-card-image">
+            <h3 class="worker-name">Илья Кондрашин</h3>
+            <p class="worker-position">Тимлид</p>
+            <hr class="divider">
+            <p class="worker-strengths">Сильные стороны: технические навыки, стрессоустойчивость</p>
+        </div>
+    </div>
+    </div>
+
+    <div class="call-to-action">
+        <h2>Паркинги Москвы</h2>
+        <p>Выберите паркинг, подходящий Вам</p>
+    </div>
+    <div style="position:relative;overflow:hidden;" class = "map">
+        <a href="https://yandex.ru/maps/213/moscow/?utm_medium=mapframe&utm_source=maps" style="color:#eee;font-size:12px;position:absolute;top:0px;">Москва</a>
+        <a href="https://yandex.ru/maps/213/moscow/?ll=37.617700%2C55.755863&utm_medium=mapframe&utm_source=maps&z=10" style="color:#eee;font-size:12px;position:absolute;top:14px;">Карта Москвы с улицами и номерами домов — Яндекс Карты</a>
+        <iframe src="https://yandex.ru/map-widget/v1/?ll=37.617700%2C55.755863&z=10" width="100%" height="400" allowfullscreen="true" style="position:relative;"></iframe>
+    </div>
+    <div class="contact-info">
+        <h2 class = "phone-number">
+            +7(777)777-77-77
+        </h2>
+        <h2 class="email">
+            plotservice@yandex.ru
+        </h2>
+        <p class = "organization-address">
+            Москва, проспект Вернадского, д.78
+        </p>
+    </div>
+{% endblock %}

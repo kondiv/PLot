@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-container">
+    <aside class="aside-section">
+        <div class="cont-aside">
+            <a class="button-settings aside_choice" href="{% url 'users:driver_profile' %}">Личные данные</a>
+            <a class="button-settings aside_choice" href="{% url 'users:parking_history' %}">История парковок</a>
+            <a class="button-settings aside_choice" href="{% url 'users:promo_codes' %}">Промоакции</a>
+            <a class="button-settings aside_choice" href="{% url 'users:notices' %}">Уведомления</a>
+            <a class="button-settings aside_choice" href="{% url 'users:feed_back' %}">Отзывы</a>
+            <a class="button-settings aside_choice" href="{% url 'users:support_and_assistance' %}">Поддержка и помощь</a>
+        </div>
+    </aside>
+
+    <main class="content-section">
+        <div>
+            <div class="promotions-section">
+                <h1>Промоакции</h1>
+                <div class="promotion-list">
+
+                    <div class="promotion-card">
+                        <h2>Скидка 20% для новых пользователей</h2>
+                        <p>Получите 20% скидку на первую парковку в нашем сервисе.</p>
+                        <p><strong>Срок действия:</strong> 2025-01-01 - 2025-06-01</p>
+                        <button class="claim-promo-btn">Применить промоакцию</button>
+                    </div>
+                    <hr>
+
+                    <div class="promotion-card">
+                        <h2>Счастливые часы!</h2>
+                        <p>Скидка 35% на парковку с 20:00 до 24:00 каждый день.</p>
+                        <p><strong>Срок действия:</strong> 2025-01-01 - 2025-01-30</p>
+                        <button class="claim-promo-btn">Применить промоакцию</button>
+                    </div>
+                    <hr>
+
+                    <div class="promotion-card">
+                        <h2>Приведи друга</h2>
+                        <p>Пригласите друга и получите дополнительную скидку 10% на следующую парковку.</p>
+                        <p><strong>Срок действия:</strong> 2025-01-01 - 2025-12-31</p>
+                        <button class="claim-promo-btn">Применить промоакцию</button>
+                    </div>
+                    <hr>
+
+                </div>
+
+                {% if not promotions %}
+                    <p>На данный момент это все доступные промоакций.</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</div>
+
+{% endblock %}

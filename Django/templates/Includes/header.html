@@ -1,0 +1,49 @@
+
+{% load static %}
+<header class="head">
+    <nav class="head_nav">
+        <a href="{% url 'MainPage' %}" class="gradient-button">
+            <li class="nav-item">
+                Главная
+            </li>
+        </a>
+        <a {% if user.is_authenticated %} href="{% url 'parking:all-parking-map' %}" {% else %} href="{% url 'users:login' %}" {% endif %} class="gradient-button">
+            <li class="nav-item">
+                Забронировать место
+            </li>
+        </a>
+        <img src="{% static 'Photo/BigLogo.png' %}" alt="Logo" style="max-width: 100px;">
+
+        {% if user.is_authenticated %}
+            {% if user.role == 'parkingowner' %}
+        <a href="{% url 'users:owner_profile' %}"  class="gradient-button">
+            <li class="nav-item">
+                Личный кабинет
+            </li>
+        </a>
+           {% else %}
+        <a href="{% url 'users:driver_profile' %}"  class="gradient-button">
+            <li class="nav-item">
+                Личный кабинет
+            </li>
+        </a>
+            {% endif %}
+        <a href="{% url 'users:logout' %}" class="gradient-button">
+            <li class="nav-item">
+                Выйти
+            </li>
+        </a>
+        {% else %}
+        <a href="{% url 'users:login' %}"  class="gradient-button">
+            <li class="nav-item">
+                Водителям
+            </li>
+        </a>
+        <a class="gradient-button" href="{% url 'users:login' %}" >
+            <li class="nav-item">
+                Для бизнеса
+            </li>
+        </a>
+        {% endif %}
+    </nav>
+  </header>

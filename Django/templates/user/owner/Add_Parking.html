@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="bd-reg">
+    <div class="cont-add-parking">
+        <div class="logo">
+            <img src="{% static 'Photo/BigLogo.png' %}" alt="Plot Logo">
+        </div>
+
+        <h2 style="margin-bottom: 20px">Добавление парковки</h2>
+
+        <form method="post" enctype="multipart/form-data" class="add_parking_form">
+            {% csrf_token %}
+            <div>
+                <label for="address">Адрес:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+            <div>
+                <label for="floors">Кол-во этажей:</label>
+                <input type="number" id="y-value" name="numbers_of_floors" class="editable-div" placeholder="1 ... 10" min="1" max="10" step="1" required>
+            </div>
+            <div>
+                <label for="price">Цена парковочного места за час:</label>
+                <input type="number" id="price" name="price" required>
+            </div>
+
+    <div id="metro_stations_wrapper">
+
+        <div id="metro_stations_container" class="scroll-container">
+            <div class="metro_color_select single-station-form">
+                <label>Станция метро:</label>
+                <div class="station-label">
+                    <div>
+                        <input type="text" class="metro_search" placeholder="Введите название станции" autocomplete="off">
+                        <div class="autocomplete-results"></div>
+                    </div>
+                    <div class="color-circle"></div>
+                </div>
+                <input type="hidden" class="selected_station" name="metro_station[]">
+                <input type="hidden" class="selected_color" name="metro_color[]">
+            </div>
+        </div>
+
+    <div style="display: flex;flex-direction: row;justify-content: space-between">
+    <button id="scroll_left_btn" class="scroll-btn" style="display: none;" type="button">◀</button>
+    <button id="scroll_right_btn" class="scroll-btn" style="display: none;" type="button">▶</button>
+    </div>
+
+    </div>
+                <div>
+                    <p>Добавить еще одну станцию</p>
+                    <button type="button" id="add_station_btn" class="btn-add-station">+</button>
+                </div>
+                <div>
+                    <label for="files">Загрузить документы:</label>
+                    <input type="file" id="uploaded_file" name="uploaded_file" multiple>
+                </div>
+
+                <div>
+                    <button type="submit" class="add_parking_form_button">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const addStationBtn = document.getElementById("add_station_btn");
+        const metroContainer = document.getElementById("metro_stations_container");
+        let stationCount = 1;
+
+        addStationBtn.addEventListener("click", function () {
+            if (stationCount >= 5) return;
+
+            const newForm = document.createElement("div");
+            newForm.classList.add("metro_color_select", "single-station-form");
+            newForm.innerHTML = `
+            <label>Станция метро:</label>
+            <div class="station-label">
+                <div>
+                    <input type="text" class="metro_search" placeholder="Введите название станции" autocomplete="off">
+                    <div class="autocomplete-results"></div>
+                </div>
+                <div class="color-circle"></div>
+            </div>
+            <input type="hidden" class="selected_station" name="metro_station[]">
+            <input type="hidden" class="selected_color" name="metro_color[]">
+        `;
+            metroContainer.appendChild(newForm);
+            stationCount++;
+
+            metroContainer.scrollLeft = metroContainer.scrollWidth;
+
+            if (stationCount === 5) {
+                addStationBtn.disabled = true;
+            }
+
+            initAutocomplete(newForm);
+        });
+    });
+
+
+    function initAutocomplete(container) {
+        const metroSearchInput = container.querySelector(".metro_search");
+        const metroResults = container.querySelector(".autocomplete-results");
+        const selectedStation = container.querySelector(".selected_station");
+        const selectedColor = container.querySelector(".selected_color");
+        const colorDisplay = container.querySelector(".color-circle");
+
+        metroSearchInput.addEventListener("input", async function () {
+            const query = this.value;
+
+            if (query.length < 2) {
+                metroResults.innerHTML = "";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/metro_search/?query=${query}`);
+                const data = await response.json();
+
+                metroResults.innerHTML = "";
+                data.results.forEach(item => {
+                    const div = document.createElement("div");
+                    div.textContent = item.station_name;
+                    div.dataset.stationId = item.station_id;
+                    div.dataset.color = item.color;
+
+                    const colorCircle = document.createElement("span");
+                    colorCircle.className = "color-circle";
+                    colorCircle.style.backgroundColor = item.color;
+
+                    div.appendChild(colorCircle);
+                    metroResults.appendChild(div);
+
+                    div.addEventListener("click", function () {
+                        metroSearchInput.value = item.station_name;
+                        selectedStation.value = item.station_id;
+                        selectedColor.value = item.color;
+
+                        colorDisplay.style.backgroundColor = item.color;
+
+                        metroResults.innerHTML = "";
+                    });
+                });
+            } catch (error) {
+                console.error("Ошибка получения данных:", error);
+            }
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!metroResults.contains(event.target) && event.target !== metroSearchInput) {
+                metroResults.innerHTML = "";
+            }
+        });
+        }
+
+        initAutocomplete(document.querySelector(".single-station-form"));
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const metroContainer = document.getElementById("metro_stations_container");
+    const scrollLeftBtn = document.getElementById("scroll_left_btn");
+    const scrollRightBtn = document.getElementById("scroll_right_btn");
+
+    // Функция для обновления видимости кнопок
+    const updateScrollButtons = () => {
+        const scrollLeft = metroContainer.scrollLeft;
+        const maxScrollLeft = metroContainer.scrollWidth - metroContainer.clientWidth;
+
+        scrollLeftBtn.style.display = scrollLeft > 0 ? "block" : "none";
+        scrollRightBtn.style.display = scrollLeft < maxScrollLeft ? "block" : "none";
+    };
+
+    // Рассчитать ширину для прокрутки
+    const calculateScrollAmount = () => {
+        const visibleWidth = metroContainer.clientWidth; // Ширина видимой области
+        const firstChild = metroContainer.querySelector(".single-station-form");
+        return firstChild ? firstChild.offsetWidth + 10 : visibleWidth; // Учитываем отступы
+    };
+
+    // Прокрутка влево
+    scrollLeftBtn.addEventListener("click", () => {
+        const scrollAmount = calculateScrollAmount();
+        metroContainer.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    });
+
+    // Прокрутка вправо
+    scrollRightBtn.addEventListener("click", () => {
+        const scrollAmount = calculateScrollAmount();
+        metroContainer.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    });
+
+    // Добавляем обработчик для обновления кнопок
+    metroContainer.addEventListener("scroll", updateScrollButtons);
+
+    // Первоначальное обновление состояния кнопок
+    updateScrollButtons();
+});
+
+
+</script>
+
+{% endblock %}
+
+
+

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="bd-reg">
+    <div class="container">
+        <div class="logo-out">
+            <img src="{% static 'Photo/BigLogo.png' %}" alt="Plot Logo">
+        </div>
+        <h2 style="color: #1b1b1b">Вы уверены, что хотите выйти?</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn-out">Выход</button>
+        </form>
+    </div>
+</div>
+  {% endblock %}

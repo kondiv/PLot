@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="bd-reg">
+    <div class="booking-confirmation-container">
+        <h2 class="confirmation-header">Подтверждение бронирования</h2>
+        <p><strong>Информация о парковке:</strong></p>
+        <p class="parking-info">Адрес: {{ address }}</p>
+        <p class="parking-info">Свободные места: {{ free_spaces }}</p>
+        {% if free_spaces > 0 %}
+        <p class="parking-status">Статус: {{ status }}</p>
+
+        <div class="form-group">
+            <label for="vehicleNumber" class="form-label">Номер транспортного средства:</label>
+            <input type="text" id="vehicleNumber" class="form-input" placeholder="Введите номер ТС" required>
+        </div>
+
+        <div class="reserve-button-container">
+            <div class="pay-approved">
+                <p>Приеду в течение 15 минут</p>
+                    <a href="{% url 'booking:payment' %}?parking_id={{ parking_id }}&price={{ price_now }}"
+                         class="reserve-later-button">
+                    Цена за час: {{ price_now }} ₽
+                </a>
+                <button class="details-button" data-modal-target="#modal1">Подробнее</button>
+            </div>
+            <div class="pay-approved">
+                <p>Приеду позже</p>
+                    <a href="{% url 'booking:payment' %}?parking_id={{ parking_id }}&price={{ price_later }}"
+                         class="reserve-now-button">
+                    Цена за час: {{ price_later }} ₽
+                </a>
+                <button class="details-button" data-modal-target="#modal2">Подробнее</button>
+            </div>
+        </div>
+
+        {% else %}
+        <div class="occupied-places">
+            <p>В данный момент все места заняты, попробуйте найти парковку поблизости</p>
+            <a href="{% url 'parking:all-parking-map' %}" class="btn" style="width: 20%; display: flex;justify-content: center">Карта</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <div class="krestik"><span class="close-button">&times;</span></div>
+            <h2 style="margin-bottom: 20px">Дополнительная информация</h2>
+            <p>У вас будет 15 минут, чтобы приехать и занять ваше место, которое мы для вас забронировали, после чего начнется почасовая оплата.
+                Если по каким либо причинам вы не приехали на свое место, мы будем вынуждены отменить вашу бронь, деньги списаны не будут<br>
+                Политика конфиденциальности....</p>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <div class="krestik"><span class="close-button">&times;</span></div>
+            <h2 style="margin-bottom: 20px">Дополнительная информация</h2>
+            <p>Вы выбираете удобное для вас время для брони, начиная с которого будет идти почасовая оплата.
+                Сервис взимает дополнительную плату за бронь на будущее. Если по каким либо причинам вы не приехали на свое место
+                почасовая оплата будет идти вплоть до того момента, пока вы не отмените ее в приложении.<br>
+                Политика конфиденциальности....</p>
+        </div>
+    </div>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const openModalButtons = document.querySelectorAll("[data-modal-target]");
+    const closeModalButtons = document.querySelectorAll(".close-button");
+    const modals = document.querySelectorAll(".modal");
+
+    openModalButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const target = document.querySelector(button.getAttribute("data-modal-target"));
+            if (target) {
+                target.style.display = "flex";
+            }
+        });
+    });
+
+    closeModalButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const modal = button.closest(".modal");
+            if (modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
+
+    window.addEventListener("click", (event) => {
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
+});
+
+
+</script>
+{% endblock %}

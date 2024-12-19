@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-container">
+    <aside class="aside-section">
+        <div class="cont-aside">
+            <a class="button-settings aside_choice" href="{% url 'users:driver_profile' %}">Личные данные</a>
+            <a class="button-settings aside_choice" href="{% url 'users:parking_history' %}">История парковок</a>
+            <a class="button-settings aside_choice" href="{% url 'users:promo_codes' %}">Промоакции</a>
+            <a class="button-settings aside_choice" href="{% url 'users:notices' %}">Уведомления</a>
+            <a class="button-settings aside_choice" href="{% url 'users:feed_back' %}">Отзывы</a>
+            <a class="button-settings aside_choice" href="{% url 'users:support_and_assistance' %}">Поддержка и помощь</a>
+        </div>
+    </aside>
+
+    <main class="content-section">
+        <div>
+            <div class="feedback-section">
+                <div>
+                    <h1>Оставить отзыв</h1>
+                </div>
+                <div>
+                    <h2>Выберите парковку:</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="parking">Парковка</label>
+                            <select name="parking" id="parking" required>
+                                {% for parking in parkings %}
+                                    <option value="{{ parking.id }}">{{ parking.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="rating">Оценка (от 1 до 5)</label>
+                            <select name="rating" id="rating" required>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="comment">Комментарий</label>
+                            <textarea id="comment" name="comment" required class="fixed-comment"></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Отправить отзыв</button>
+                    </form>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <!-- Новая секция для отзывов пользователей -->
+            <div class="existing-reviews">
+                <h2>Ваши отзывы</h2>
+                {% if reviews %}
+                    {% for review in reviews %}
+                        <div class="review-card">
+                            <h3>Парковка: {{ review.parking.address }}</h3>
+                            <p>Оценка: {{ review.rating }}</p>
+                            {% if review.comment %}
+                                <p>Комментарий: {{ review.comment }}</p>
+                            {% else %}
+                                <p>Комментарий отсутствует.</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Вы еще не оставили ни одного отзыва.</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</div>
+
+{% endblock %}

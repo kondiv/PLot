@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plot</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'photo/logo.png' %}" />
+</head>
+{% block extrahead %}{% endblock extrahead %}
+<body>
+    {% include 'includes/header.html' %} 
+      <main id="main">
+          {% block content %}
+          {% endblock %}
+      </main>
+</body>
+</html>

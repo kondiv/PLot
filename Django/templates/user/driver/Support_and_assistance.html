@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-container">
+    <aside class="aside-section">
+        <div class="cont-aside">
+            <a class="button-settings aside_choice" href="{% url 'users:driver_profile' %}">Личные данные</a>
+            <a class="button-settings aside_choice" href="{% url 'users:parking_history' %}">История парковок</a>
+            <a class="button-settings aside_choice" href="{% url 'users:promo_codes' %}">Промоакции</a>
+            <a class="button-settings aside_choice" href="{% url 'users:notices' %}">Уведомления</a>
+            <a class="button-settings aside_choice" href="{% url 'users:feed_back' %}">Отзывы</a>
+            <a class="button-settings aside_choice" href="{% url 'users:support_and_assistance' %}">Поддержка и помощь</a>
+        </div>
+    </aside>
+
+    <main class="content-section">
+        <div>
+            <h1 class = "h1-h2">Поддержка и помощь</h1>
+            <section>
+                <h2 class = "h1-h2">1. Часто задаваемые вопросы</h2>
+                <ul class = "padding-ul">
+                    <li>Как забронировать парковочное место?</li>
+                    <li>Как отменить бронирование?</li>
+                    <li>Что делать, если возникли проблемы с оплатой?</li>
+                </ul>
+            </section>
+            <section>
+                <h2 class = "h1-h2">2. Как пользоваться сайтом</h2>
+                <p class = "padding-ul">Здесь будет информация о том, как правильно использовать сайт, различные советы и рекомендации.</p>
+            </section>
+            <section>
+                <h2 class = "h1-h2">3. Поддержка</h2>
+                <p class = "padding-ul">Если у вас есть вопросы, пожалуйста, свяжитесь с нашей службой поддержки через электронную почту support@example.com или по телефону +123456789.</p>
+            </section>
+        </div>
+    </main>
+</div>
+
+{% endblock content %}

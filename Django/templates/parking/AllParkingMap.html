@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="main-map-container">
+        <aside class="map-page-sidebar">
+        <div class="search-bar">
+            <input type="text" placeholder="Введите адрес или метро" id="addressInput">
+            <span class="search-icon" onclick="performSearch()" style="cursor: pointer">🔍</span>
+        </div>
+
+        <div id="parkingResults" style="margin-top: 70px;"></div>
+        </aside>
+<iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A25543b7edf5b5ffa6a29a9372b397496d701304211bd0313c965c08456857533&amp;source=constructor" width="100%" height="100%" frameborder="0"></iframe>
+</div>
+    <script>
+async function performSearch() {
+    const query = document.getElementById("addressInput").value.trim();
+    const resultsContainer = document.getElementById("parkingResults");
+
+    if (query.length === 0) {
+        resultsContainer.innerHTML = "<p>Введите название станции метро.</p>";
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/search_parking_by_metro/?query=${query}`);
+        const data = await response.json();
+
+        if (data.results.length === 0) {
+            resultsContainer.innerHTML = "<p>Парковки не найдены.</p>";
+            return;
+        }
+
+        resultsContainer.innerHTML = data.results
+            .map(parking => {
+                const trafficStatus = parking.load_percentage > 80
+                    ? "Высокая загруженность"
+                    : parking.load_percentage > 50
+                        ? "Средняя загруженность"
+                        : "Низкая загруженность";
+
+                const borderColor = parking.load_percentage > 80
+                    ? "red"
+                    : parking.load_percentage > 50
+                        ? "orange"
+                        : "green";
+
+                return `
+                    <div class="parking-card-map"
+                         style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-radius: 5px; margin-bottom: 10px; border-left: 5px solid ${borderColor};">
+                        <div style="flex-grow: 1;">
+                            <p>${parking.address}</p>
+                            <p>Ближайшая станция метро:</p>
+                            <ul style="padding-left: 15px; list-style: none;">
+                                ${parking.stations.map(station => `
+                                    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+                                        ${station.colors.map(color => `
+                                            <span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; background-color: ${color};"></span>
+                                        `).join('')}
+                                        ${station.name}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                            <p>Свободные места: ${parking.free_spaces}</p>
+                            <p class="traffic-status">${trafficStatus}</p>
+                        </div>
+                        <a href="{% url 'parking:booking_confirmation' %}?parking_id=${parking.id}&address=${encodeURIComponent(parking.address)}&free_spaces=${parking.free_spaces}&status=${encodeURIComponent(trafficStatus)}"
+                           class="reserve-button"
+                           style="width: 115px; padding: 5px 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px; text-decoration: none; margin-left: 5px;">
+                            Забронировать место
+                        </a>
+                    </div>
+                `;
+            }).join('');
+    } catch (error) {
+        console.error("Ошибка выполнения поиска:", error);
+        resultsContainer.innerHTML = "<p>Произошла ошибка. Попробуйте позже.</p>";
+    }
+}
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const address = urlParams.get("address");
+        const freeSpaces = urlParams.get("free_spaces");
+        const status = urlParams.get("status");
+
+        if (address) {
+            document.querySelector(".parking-info:nth-of-type(1)").textContent = `Адрес: ${address}`;
+        }
+
+        if (freeSpaces) {
+            document.querySelector(".parking-info:nth-of-type(2)").textContent = `Свободные места: ${freeSpaces}`;
+        }
+
+        if (status) {
+            document.querySelector(".parking-status").textContent = `Статус: ${status}`;
+        }
+    });
+
+</script>
+{% endblock %}

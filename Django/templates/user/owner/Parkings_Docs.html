@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="page-container">
+    <aside class="aside-section">
+        <div class="cont-aside">
+            <a class="button-settings aside_choice" href="{% url 'users:owner_profile' %}">Личные данные</a>
+            <a class="button-settings aside_choice" href="{% url 'users:parkings_and_docs' %}">Парковки, Документы</a>
+            <a class="button-settings aside_choice" href="{% url 'users:finance' %}">Доход</a>
+            <a class="button-settings aside_choice" href="{% url 'users:graphics' %}">Графики загруженности парковок</a>
+        </div>
+    </aside>
+
+    <main class="content-section">
+        <div class="personal-info">
+            <div>
+                <h1>Ваши парковки и документы</h1>
+            </div>
+
+            <div>
+                <h2>Парковки:</h2>
+            </div>
+
+            <div class="parking-container">
+                {% for parking in parkings %}
+                <div class="cont">
+                    <div>
+                        <h3>{{ parking.address }}</h3>
+                        <h4>Состояние: <span style="
+                            {% if parking.states == "waitsaproved" %} color: coral
+                            {% elif parking.states == "waitsforsettings" %} color: orange
+                            {% elif parking.states == "active" %} color: green;
+                            {% else %} color: gray;
+                            {% endif %}">{{ parking.get_states_display }}</span></h4>
+                        <h4> Этажей: {{ parking.numbers_of_floors }}</h4>
+                        <h4> Свободных мест: {{ parking.get_total_parking_lots }}</h4>
+                        <h4> Занятых мест: {{ parking.get_occupied_parking_lots }}</h4>
+                        <h4>Ближайшие станции метро:</h4>
+                        <ol style="margin-left: 20px">
+                            {% for station in parking.parking.all %}
+                            <li >{{ station.name_of_station }}</li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                    {% if parking.states == "waitsforsettings" or parking.states == "active" %}
+                    <div>
+                        <button class="button-settings"><span>⚙️</span>Настройка</button>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <a href="{% url 'parking:add_parking' %}" class="add_parking_but">Добавить парковку</a>
+            </div>
+
+            <div class="slider">
+                <div class="slider-images">
+                    <img src="https://avatars.mds.yandex.net/i?id=55084ba491a200ab614f3e9d4a002d10f21211fe-7546005-images-thumbs&n=13" alt="Image 1">
+                    <img src="https://avatars.mds.yandex.net/i?id=55084ba491a200ab614f3e9d4a002d10f21211fe-7546005-images-thumbs&n=13" alt="Image 2">
+                    <img src="https://avatars.mds.yandex.net/i?id=55084ba491a200ab614f3e9d4a002d10f21211fe-7546005-images-thumbs&n=13" alt="Image 3">
+                </div>
+                <div>
+                    <h2>Документы:</h2>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

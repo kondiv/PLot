@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-container">
+    <aside class="aside-section">
+        <div class="cont-aside">
+            <a class="button-settings aside_choice" href="{% url 'users:driver_profile' %}">Личные данные</a>
+            <a class="button-settings aside_choice" href="{% url 'users:parking_history' %}">История парковок</a>
+            <a class="button-settings aside_choice" href="{% url 'users:promo_codes' %}">Промоакции</a>
+            <a class="button-settings aside_choice" href="{% url 'users:notices' %}">Уведомления</a>
+            <a class="button-settings aside_choice" href="{% url 'users:feed_back' %}">Отзывы</a>
+            <a class="button-settings aside_choice" href="{% url 'users:support_and_assistance' %}">Поддержка и помощь</a>
+        </div>
+    </aside>
+
+    <main class="content-section">
+        <div>
+            <h1>История парковок</h1>
+            <div class="parking-history">
+                <div class="parking-card">
+                    <h2>2024-06-01</h2>
+                    <p><strong>Адрес:</strong> ул. Малая Бронная</p>
+                    <p><strong>Парковка:</strong> Парковка 1</p>
+                    <p><strong>Парковочное место:</strong> 108</p>
+                    <p><strong>Время:</strong> 14:00</p>
+                </div>
+
+                <div class="parking-card">
+                    <h2>2024-06-11</h2>
+                    <p><strong>Адрес:</strong> ул. Арбат</p>
+                    <p><strong>Парковка:</strong> Парковка 2</p>
+                    <p><strong>Парковочное место:</strong> 121</p>
+                    <p><strong>Время:</strong> 16:15</p>
+                </div>
+
+                <div class="parking-card">
+                    <h2>2024-06-15</h2>
+                    <p><strong>Адрес:</strong> ул. Пушкина</p>
+                    <p><strong>Парковка:</strong> Парковка 4</p>
+                    <p><strong>Парковочное место:</strong> 407</p>
+                    <p><strong>Время:</strong> 09:30</p>
+                </div>
+
+                <div class="parking-card">
+                    <h2>2024-07-10</h2>
+                    <p><strong>Адрес:</strong> ул. Тверская</p>
+                    <p><strong>Парковка:</strong> Парковка 3</p>
+                    <p><strong>Парковочное место:</strong> 315</p>
+                    <p><strong>Время:</strong> 12:45</p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div style="display: flex;justify-content: center;margin-top: 30px">
+                <h1>Ваши активные брони</h1>
+            </div>
+
+            <div class="booking-container">
+                {% for booking in bookings %}
+                <div class="booking-card">
+                    <div class="booking-info">
+                        <h3>Парковка: {{ booking.parking_lot_id.parking_id.address }}</h3>
+                        <p>Номер парковочного места: {{ booking.parking_lot_id.id }}</p>
+                        <p>Цена: {{ booking.price }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if not bookings %}
+                <p>У вас нет активных броней.</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock content %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="page-container">
+    <aside class="aside-section">
+        <div class="cont-aside">
+            <a class="button-settings aside_choice" href="{% url 'users:owner_profile' %}">Личные данные</a>
+            <a class="button-settings aside_choice" href="{% url 'users:parkings_and_docs' %}">Парковки, Документы</a>
+            <a class="button-settings aside_choice" href="{% url 'users:finance' %}">Доход</a>
+            <a class="button-settings aside_choice" href="{% url 'users:graphics' %}">Графики загруженности парковок</a>
+        </div>
+    </aside>
+
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<body class="bd-reg">
+    <div class="container" style="width: 1000px;">
+        <h1 class="prof-text">Здравствуйте, {{ user.get_first_name }}!</h1>
+
+        <div class="user-info">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <div style="padding: 10px;">
+                    <span>👤</span>
+                    <span>{{ user.username }}</span>
+                </div>
+                <a href="#" class="btn">Редактировать</a>
+            </div>
+            <div style="padding: 10px">
+                <span>📞</span>
+                <span>{{ user.phone_number }}</span>
+            </div>
+            <div style="padding: 10px">
+                <span>📧</span>
+                <span>{{ user.email }}</span>
+            </div>
+        </div>
+
+        <hr>
+        <h2 style="margin-top: 20px; text-align: left;margin-left: 40px; margin-bottom: 15px;">Последние операции:</h2>
+        <div class="operations-list" style="text-align: left;">
+            <div class="operation-row" style="margin-bottom: 5px;">
+                <div class="operation-info" style="background-color: #D3D3D3; padding: 10px;margin-left: 40px; margin-right: 15px; border-radius: 20px;">
+                    <span>ТЦ "Авиапарк"</span>
+                    <span>04.05.2023</span>
+                    <span>Место: A6</span>
+                    <span>Цена: 400 руб.</span>
+                </div>
+            </div>
+            <div class="operation-row" style="margin-bottom: 5px;">
+                <div class="operation-info" style="background-color: #808080; padding: 10px;margin-left: 40px; margin-right: 15px; border-radius: 20px;">
+                    <span>ТРЦ "Европейский"</span>
+                    <span>24.06.2023</span>
+                    <span>Место: B25</span>
+                    <span>Цена: 200 руб.</span>
+                </div>
+            </div>
+            <div class="operation-row" style="margin-bottom: 5px;">
+                <div class="operation-info" style="background-color: #D3D3D3; padding: 10px;margin-left: 40px; margin-right: 15px; border-radius: 20px;">
+                    <span>ТРЦ "Метрополис"</span>
+                    <span>29.07.2023</span>
+                    <span>Место: A17</span>
+                    <span>Цена: 200 руб.</span>
+                </div>
+            </div>
+            <div class="operation-row" style="margin-bottom: 5px;">
+                <div class="operation-info" style="background-color: #808080; padding: 10px;margin-left: 40px; margin-right: 15px; border-radius: 20px;">
+                    <span>Ул. Вернадского 71 "Фудкорт"</span>
+                    <span>15.09.2023</span>
+                    <span>Место: 19</span>
+                    <span>Цена: 200 руб.</span>
+                </div>
+            </div>
+            <div class="operation-row">
+                <div class="operation-info" style="background-color: #D3D3D3; padding: 10px; border-radius: 20px;margin-left: 40px; margin-right: 15px;">
+                    <span>Ул. Мира 81 кб</span>
+                    <span>23.11.2023</span>
+                    <span>Место: 7</span>
+                    <span>Цена: 0 руб.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-container">
+    <aside class="aside-section">
+        <div class="cont-aside">
+            <a class="button-settings aside_choice" href="{% url 'users:driver_profile' %}">Личные данные</a>
+            <a class="button-settings aside_choice" href="{% url 'users:parking_history' %}">История парковок</a>
+            <a class="button-settings aside_choice" href="{% url 'users:promo_codes' %}">Промоакции</a>
+            <a class="button-settings aside_choice" href="{% url 'users:notices' %}">Уведомления</a>
+            <a class="button-settings aside_choice" href="{% url 'users:feed_back' %}">Отзывы</a>
+            <a class="button-settings aside_choice" href="{% url 'users:support_and_assistance' %}">Поддержка и помощь</a>
+        </div>
+    </aside>
+
+    <main class="content-section">
+        <div>
+            <h1>Уведомления</h1>
+            <ul class="notifications-list">
+                <li class="notification-card">
+                    <div class="notification-header">
+                        <span class="notification-date">15 марта 2024, 12:00</span>
+                        <span class="icon">📣</span>
+                    </div>
+                    <div class="notification-message">
+                        Новая промо акция: Скидка 15% на бронирование в выходные!
+                    </div>
+                </li>
+                <li class="notification-card">
+                    <div class="notification-header">
+                        <span class="notification-date">14 марта 2024, 09:30</span>
+                        <span class="icon">⏰</span>
+                    </div>
+                    <div class="notification-message">
+                        Напоминание: У вас забронировано место на ул. Пушкина сегодня в 15:00.
+                    </div>
+                </li>
+                <li class="notification-card">
+                    <div class="notification-header">
+                        <span class="notification-date">13 марта 2024, 18:45</span>
+                        <span class="icon">🔄</span>
+                    </div>
+                    <div class="notification-message">
+                        Обновление: Проверьте новые функции на нашем сайте.
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </main>
+</div>
+{% endblock content %}

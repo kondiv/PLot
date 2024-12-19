@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-container">
+    <aside class="aside-section">
+        <div class="cont-aside">
+            <a class="button-settings aside_choice" href="{% url 'users:driver_profile' %}">Личные данные</a>
+            <a class="button-settings aside_choice" href="{% url 'users:parking_history' %}">История парковок</a>
+            <a class="button-settings aside_choice" href="{% url 'users:promo_codes' %}">Промоакции</a>
+            <a class="button-settings aside_choice" href="{% url 'users:notices' %}">Уведомления</a>
+            <a class="button-settings aside_choice" href="{% url 'users:feed_back' %}">Отзывы</a>
+            <a class="button-settings aside_choice" href="{% url 'users:support_and_assistance' %}">Поддержка и помощь</a>
+        </div>
+    </aside>
+
+    <main class="content-section">
+        <div>
+            <div class="personal-info">
+                    <div >
+                        <h1>Личные данные</h1>
+                    </div>
+                <div>
+                <div class="cont-redact-first">
+                    <div >
+                        <h2>Фамилия: {{ user.get_second_name }}</h2>
+                    </div>
+                    <div >
+                        <h2>Имя: {{ user.get_first_name}}</h2>
+                    </div>
+                    <div >
+                        <h2>Отчество: {{ user.get_third_name}}</h2>
+                    </div>
+                    <div >
+                        <h2>Почта: {{ user.email}}</h2>
+                    </div>
+                    <div >
+                        <h2>Номер телефона: {{ user.phone_number }}</h2>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; margin-top: 30px;flex-direction: column">
+                <h2 style="margin-bottom: 20px"> Изменить данные </h2>
+                <div class="cont-redact">
+                    <form method="post" style="display: flex; flex-wrap: wrap">
+                    {% csrf_token %}
+                <div class="form-group" style="position: relative;">
+                    <label for="FIO">ФИО</label>
+                    <input type="text" name="FIO" value="{{ user.username }}" disabled>
+                    <button type="button" class="edit-btn">Изменить</button>
+                </div>
+                <div class="form-group" style="position: relative;">
+                    <label for="email">Почта</label>
+                    <input type="email" name="email" value="{{ user.email }}" disabled>
+                    <button type="button" class="edit-btn">Изменить</button>
+                </div>
+                <div class="form-group" style="position: relative;">
+                    <label for="phone_number">Телефон</label>
+                    <input type="text" id="phone_number" name="phone_number" value="{{ user.phone_number }}" disabled>
+                    <button type="button" class="edit-btn">Изменить</button>
+                </div>
+                <div class="form-group" style="position: relative;">
+                    <label for="password">Пароль</label>
+                    <input type="password" name="password" placeholder="********" disabled>
+                    <button type="button" class="edit-btn">Изменить</button>
+                </div>
+
+                </form>
+                </div>
+            </div>
+            </div>
+    </main>
+</div>
+{% endblock %}
